@@ -19,6 +19,9 @@ for AFILE in ${FILES[@]}
 do
     echo -e "[$(date)] Processing \t$AFILE"
     COLLECTION=`echo $AFILE | sed -n 's/.*\-\(.*\).json/\1/p'`
+    echo "Will delete db promotions 🪓"
+    mongo --host ${HOST} --username productListUser --password productListPassword --authenticationDatabase admin promotions --eval 'db.dropDatabase()'
+    echo "Deleted db promotions ❤️‍🔥"
     mongoimport --host ${HOST} --username productListUser --password productListPassword --authenticationDatabase admin --db promotions --collection ${COLLECTION} --mode upsert --file ${AFILE}
     echo -e "[$(date)] Done \t\t$AFILE"
 done
