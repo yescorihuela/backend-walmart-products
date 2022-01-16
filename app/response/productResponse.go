@@ -6,5 +6,5 @@ type ProductResponse struct {
 	Description string  `json:"description"`
 	Price       float32 `json:"price"`
 	HasDiscount bool    `json:"has_discount"`
-	Discount    int     `json:"discount,omitempty"`
+	Discount    uint    `json:"discount,omitempty"`
 }

@@ -18,3 +18,12 @@ func (ph *ProductHandlers) GetAllProducts(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, response)
 }
+
+func (ph *ProductHandlers) SearchByCriteria(ctx *gin.Context) {
+	criteria := ctx.Query("q")
+	response, err := ph.productService.FindProductsByCriteria(criteria)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, nil)
+	}
+	ctx.JSON(http.StatusOK, response)
+}
