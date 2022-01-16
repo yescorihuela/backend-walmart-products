@@ -12,6 +12,7 @@ type Product struct {
 	Id          uint    `json:"id"`
 	Brand       string  `json:"brand"`
 	Description string  `json:"description"`
+	Image       string  `json:"image"`
 	Price       float32 `json:"price"`
 }
 
@@ -21,11 +22,12 @@ type ProductRepository interface {
 	GetProduct(string) (*Product, error)
 }
 
-func NewProduct(id uint, brand, description string, price float32) Product {
+func NewProduct(id uint, brand, description, image string, price float32) Product {
 	newProduct := Product{
 		Id:          id,
 		Brand:       brand,
 		Description: description,
+		Image:       image,
 		Price:       price,
 	}
 	return newProduct
@@ -37,6 +39,7 @@ func (product Product) ToDTO(criteria string) response.ProductResponse {
 			Id:          product.Id,
 			Brand:       product.Brand,
 			Description: product.Description,
+			Image:       product.Image,
 			Price:       product.Price - discount(product.Price, APPLIED_DISCOUNT),
 			HasDiscount: true,
 			Discount:    APPLIED_DISCOUNT,
@@ -46,6 +49,7 @@ func (product Product) ToDTO(criteria string) response.ProductResponse {
 		Id:          product.Id,
 		Brand:       product.Brand,
 		Description: product.Description,
+		Image:       product.Image,
 		Price:       product.Price,
 		HasDiscount: false,
 	}
@@ -56,6 +60,7 @@ func (product Product) ProductDTORaw() response.ProductResponse {
 		Id:          product.Id,
 		Brand:       product.Brand,
 		Description: product.Description,
+		Image:       product.Image,
 		Price:       product.Price,
 		HasDiscount: false,
 	}
