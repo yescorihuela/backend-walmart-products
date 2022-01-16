@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mongodb-local:
+    container_name: mongodb-local
+    image: "mongo:3.6.8"
+    restart: always
+    environment:
+      MONGO_DATA_DIR: /data/db
+      MONGO_INITDB_ROOT_USERNAME: productListUser
+      MONGO_INITDB_ROOT_PASSWORD: productListPassword
+      MONGO_INITDB_PORT: 27017
+      MONGO_INITDB_DATABASE: promotions
+
+    ports:
+      - 27017:27017
+    networks:
+      - products_network
+    volumes:
+      - ./resources/database/products-db-master/database:/database
+      - ./mongodb/data/db:/data/db
+      - ./resources/database/products-db-master/mongo-init-admin-user.js:/docker-entrypoint-initdb.d/mongo-init-admin-user.js
+    command: bash -c "mongod --bind_ip_all --fork --logpath=/dev/null && ./database/import.sh mongodb-local"
+    # command: bash -c "mongod --bind_ip_all"
+  backend_products:
+    build:
+      dockerfile: dockerfile.backend-products
+      context: .
+    ports:
+      - 8082:8082
+    volumes:
+      - .:/walmart-products
+    env_file:
+      - .env.products
+    depends_on:
+      - mongodb_products
+    networks:
+      - products_network
+
+networks:
+  products_network:
+    driver: bridge
