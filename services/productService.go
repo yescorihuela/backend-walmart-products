@@ -7,7 +7,8 @@ import (
 
 type ProductService interface {
 	FindAllProducts() ([]response.ProductResponse, error)
-	FindOneProduct(criteria string) (*response.ProductResponse, error)
+	FindProductsByCriteria(string) ([]response.ProductResponse, error)
+	FindOneProduct(string) (*response.ProductResponse, error)
 }
 
 type DefaultProductService struct {
@@ -28,7 +29,20 @@ func (s DefaultProductService) FindAllProducts() ([]response.ProductResponse, er
 	return response, nil
 }
 
-func (s DefaultProductService) FindOneProduct(criteria string) (*response.ProductResponse, error) {
+func (s DefaultProductService) FindProductsByCriteria(criteria string) ([]response.ProductResponse, error) {
+	products, err := s.repo.GetProductsByCriteria(criteria)
+	if err != nil {
+		return nil, err
+	}
+	response := domain.ProductToDTOCollectionFiltered(products, criteria)
+	return response, nil
+}
 
-	return nil, nil
+func (s DefaultProductService) FindOneProduct(criteria string) (*response.ProductResponse, error) {
+	product, err := s.repo.GetProduct(criteria)
+	if err != nil {
+		return nil, err
+	}
+	response := product.ToDTO(criteria)
+	return &response, nil
 }
