@@ -8,6 +8,13 @@ func (p ProductRepositoryStub) GetAllProducts() ([]Product, error) {
 	return p.products, nil
 }
 
+func (p ProductRepositoryStub) GetProductsByCriteria(string) ([]Product, error) {
+	products := []Product{
+		{Id: 101, Brand: "Amor a Roma", Description: "adda", Price: 29900},
+	}
+	return products, nil
+}
+
 func (p ProductRepositoryStub) GetProduct(criteria string) (*Product, error) {
 	return &Product{Id: 101, Brand: "Amor a Roma", Description: "adda", Price: 29900}, nil
 }
