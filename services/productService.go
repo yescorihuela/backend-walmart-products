@@ -26,5 +26,9 @@ func (s DefaultProductService) FindAllProducts() ([]response.ProductResponse, er
 
 	response := domain.ProductToDTOCollection(products)
 	return response, nil
+}
 
+func (s DefaultProductService) FindOneProduct(criteria string) (*response.ProductResponse, error) {
+
+	return nil, nil
 }

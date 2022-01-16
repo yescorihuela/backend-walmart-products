@@ -13,6 +13,11 @@ type Product struct {
 	Price       float32 `json:"price"`
 }
 
+type ProductRepository interface {
+	GetAllProducts() ([]Product, error)
+	GetProduct(string) (*Product, error)
+}
+
 func NewProduct(id uint, brand, description string, price float32) Product {
 	newProduct := Product{
 		Id:          id,
@@ -43,6 +48,24 @@ func (product Product) ProductDTO(palindromeCriteria string) response.ProductRes
 	}
 }
 
+func (product Product) ProductDTORaw() response.ProductResponse {
+	return response.ProductResponse{
+		Id:          product.Id,
+		Brand:       product.Brand,
+		Description: product.Description,
+		Price:       product.Price,
+		HasDiscount: false,
+	}
+}
+
+func ProductToDTOCollection(products []Product) []response.ProductResponse {
+	var productsCollection []response.ProductResponse
+	for _, product := range products {
+		productsCollection = append(productsCollection, product.ProductDTORaw())
+	}
+	return productsCollection
+}
+
 func discount(price float32, discount int) float32 {
 	return (price * float32(discount)) * 100
 }
@@ -53,9 +76,4 @@ func isPalindrome(value string) bool {
 		result = result + string(s)
 	}
 	return strings.ToLower(value) == result
-}
-
-type ProductRepository interface {
-	GetAllProducts() ([]Product, error)
-	GetProduct(criteria string) *Product
 }
