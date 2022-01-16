@@ -5,23 +5,29 @@ services:
     container_name: mongodb-local
     image: "mongo:3.6.8"
     restart: always
-    environment:
-      MONGO_DATA_DIR: /data/db
-      MONGO_INITDB_ROOT_USERNAME: productListUser
-      MONGO_INITDB_ROOT_PASSWORD: productListPassword
-      MONGO_INITDB_PORT: 27017
-      MONGO_INITDB_DATABASE: promotions
-
+    env_file:
+      - .env.mongodb
     ports:
       - 27017:27017
     networks:
       - products_network
     volumes:
-      - ./resources/database/products-db-master/database:/database
-      - ./mongodb/data/db:/data/db
-      - ./resources/database/products-db-master/mongo-init-admin-user.js:/docker-entrypoint-initdb.d/mongo-init-admin-user.js
-    command: bash -c "mongod --bind_ip_all --fork --logpath=/dev/null && ./database/import.sh mongodb-local"
-    # command: bash -c "mongod --bind_ip_all"
+      - ./resources/database/products-db-master/database/01-products.json:/database/01-products.json
+      - mongodb:/data/db
+    command: [--auth]
+
+  mongo-seed:
+    container_name: mongo-seed
+    build:
+      dockerfile: dockerfile.mongodb-seed
+      context: ./resources/database/products-db-master/database
+    env_file:
+      - .env.mongodb
+    networks:
+      - products_network
+    depends_on:
+      - mongodb-local
+
   backend_products:
     build:
       dockerfile: dockerfile.backend-products
@@ -40,3 +46,6 @@ services:
 networks:
   products_network:
     driver: bridge
+
+volumes:
+  mongodb:

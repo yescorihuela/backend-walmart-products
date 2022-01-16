@@ -1,0 +1,7 @@
+FROM mongo:3.6.8
+
+COPY . ./database
+
+RUN chmod +x /database/import.sh
+
+CMD ["./database/import.sh", "mongodb-local"]
