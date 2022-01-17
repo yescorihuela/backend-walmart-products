@@ -3,12 +3,13 @@ package services
 import (
 	"github.com/yescorihuela/walmart-products/app/response"
 	"github.com/yescorihuela/walmart-products/domain"
+	"github.com/yescorihuela/walmart-products/errs"
 )
 
 type ProductService interface {
-	FindAllProducts() ([]response.ProductResponse, error)
-	FindProductsByCriteria(string) ([]response.ProductResponse, error)
-	FindOneProduct(string) (*response.ProductResponse, error)
+	FindAllProducts() ([]response.ProductResponse, *errs.AppError)
+	FindProductsByCriteria(string) ([]response.ProductResponse, *errs.AppError)
+	FindOneProduct(string) (*response.ProductResponse, *errs.AppError)
 }
 
 type DefaultProductService struct {
@@ -19,7 +20,7 @@ func NewProductService(repo domain.ProductRepository) DefaultProductService {
 	return DefaultProductService{repo}
 }
 
-func (s DefaultProductService) FindAllProducts() ([]response.ProductResponse, error) {
+func (s DefaultProductService) FindAllProducts() ([]response.ProductResponse, *errs.AppError) {
 	products, err := s.repo.GetAllProducts()
 	if err != nil {
 		return nil, err
@@ -29,7 +30,7 @@ func (s DefaultProductService) FindAllProducts() ([]response.ProductResponse, er
 	return response, nil
 }
 
-func (s DefaultProductService) FindProductsByCriteria(criteria string) ([]response.ProductResponse, error) {
+func (s DefaultProductService) FindProductsByCriteria(criteria string) ([]response.ProductResponse, *errs.AppError) {
 	products, err := s.repo.GetProductsByCriteria(criteria)
 	if err != nil {
 		return nil, err
@@ -38,7 +39,7 @@ func (s DefaultProductService) FindProductsByCriteria(criteria string) ([]respon
 	return response, nil
 }
 
-func (s DefaultProductService) FindOneProduct(criteria string) (*response.ProductResponse, error) {
+func (s DefaultProductService) FindOneProduct(criteria string) (*response.ProductResponse, *errs.AppError) {
 	product, err := s.repo.GetProduct(criteria)
 	if err != nil {
 		return nil, err
