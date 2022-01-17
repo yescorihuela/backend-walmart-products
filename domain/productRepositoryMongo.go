@@ -2,7 +2,6 @@ package domain
 
 import (
 	"context"
-	"log"
 	"strconv"
 	"time"
 
@@ -22,11 +21,11 @@ func (prm ProductRepositoryMongo) GetAllProducts() ([]Product, *errs.AppError) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	cursor, err := collection.Find(ctx, bson.M{})
 	if err != nil {
-		log.Fatal(err)
+		return nil, errs.NewUnexpectedError(err.Error())
 	}
 	defer cursor.Close(ctx)
 	if err = cursor.All(ctx, &products); err != nil {
-		log.Fatal(err)
+		return nil, errs.NewUnexpectedError(err.Error())
 	}
 
 	if len(products) == 0 {
@@ -55,11 +54,11 @@ func (prm ProductRepositoryMongo) GetProductsByCriteria(criteria string) ([]Prod
 	productsByCriteria, err := collection.Find(ctx, searchingCriteria)
 
 	if err != nil {
-		log.Fatal(err)
+		return nil, errs.NewUnexpectedError(err.Error())
 	}
 	defer productsByCriteria.Close(ctx)
 	if err = productsByCriteria.All(ctx, &products); err != nil {
-		log.Fatal(err)
+		return nil, errs.NewUnexpectedError(err.Error())
 	}
 
 	if len(products) == 0 {
