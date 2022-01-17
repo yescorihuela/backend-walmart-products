@@ -23,6 +23,7 @@ func (prm ProductRepositoryMongo) GetAllProducts() ([]Product, *errs.AppError) {
 	if err != nil {
 		return nil, errs.NewUnexpectedError(err.Error())
 	}
+
 	defer cursor.Close(ctx)
 	if err = cursor.All(ctx, &products); err != nil {
 		return nil, errs.NewUnexpectedError(err.Error())
@@ -40,18 +41,21 @@ func (prm ProductRepositoryMongo) GetProductsByCriteria(criteria string) ([]Prod
 	collection := prm.client.Database("promotions").Collection("products")
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 
-	var searchingCriteria bson.M
+	var filter bson.M
 
 	id, errId := strconv.Atoi(criteria)
 	if errId == nil {
-		searchingCriteria = bson.M{"id": id}
+		filter = bson.M{"id": id}
 	} else {
-		var orQuery []map[string]interface{}
-		orQuery = append(orQuery, bson.M{"brand": criteria}, bson.M{"description": criteria})
-		searchingCriteria = bson.M{"$or": orQuery}
+		filter = bson.M{
+			"$or": bson.A{
+				bson.M{"brand": bson.M{"$regex": criteria, "$options": "i"}},
+				bson.M{"description": bson.M{"$regex": criteria, "$options": "i"}},
+			},
+		}
 	}
 
-	productsByCriteria, err := collection.Find(ctx, searchingCriteria)
+	productsByCriteria, err := collection.Find(ctx, filter)
 
 	if err != nil {
 		return nil, errs.NewUnexpectedError(err.Error())
