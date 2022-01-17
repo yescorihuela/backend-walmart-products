@@ -9,7 +9,6 @@ import (
 type ProductService interface {
 	FindAllProducts() ([]response.ProductResponse, *errs.AppError)
 	FindProductsByCriteria(string) ([]response.ProductResponse, *errs.AppError)
-	FindOneProduct(string) (*response.ProductResponse, *errs.AppError)
 }
 
 type DefaultProductService struct {
@@ -37,13 +36,4 @@ func (s DefaultProductService) FindProductsByCriteria(criteria string) ([]respon
 	}
 	response := domain.ProductToDTOCollectionFiltered(products, criteria)
 	return response, nil
-}
-
-func (s DefaultProductService) FindOneProduct(criteria string) (*response.ProductResponse, *errs.AppError) {
-	product, err := s.repo.GetProduct(criteria)
-	if err != nil {
-		return nil, err
-	}
-	response := product.ToDTO(criteria)
-	return &response, nil
 }

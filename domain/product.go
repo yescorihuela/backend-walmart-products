@@ -20,7 +20,6 @@ type Product struct {
 type ProductRepository interface {
 	GetAllProducts() ([]Product, *errs.AppError)
 	GetProductsByCriteria(string) ([]Product, *errs.AppError)
-	GetProduct(string) (*Product, *errs.AppError)
 }
 
 func NewProduct(id uint, brand, description, image string, price float32) Product {

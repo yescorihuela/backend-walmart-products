@@ -36,10 +36,6 @@ func (prm ProductRepositoryMongo) GetAllProducts() ([]Product, *errs.AppError) {
 	return products, nil
 }
 
-func (prm ProductRepositoryMongo) GetProduct(criteria string) (*Product, *errs.AppError) {
-	return nil, nil
-}
-
 func (prm ProductRepositoryMongo) GetProductsByCriteria(criteria string) ([]Product, *errs.AppError) {
 	var products []Product
 	collection := prm.client.Database("promotions").Collection("products")
