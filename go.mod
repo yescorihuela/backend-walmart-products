@@ -3,6 +3,7 @@ module github.com/yescorihuela/walmart-products
 go 1.17
 
 require (
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
 	go.mongodb.org/mongo-driver v1.8.2
 )

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/yescorihuela/walmart-products/config"
 	"github.com/yescorihuela/walmart-products/domain"
@@ -27,6 +28,7 @@ func NewServer(host string, port uint) Server {
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
 	}
 
+	server.engine.Use(cors.Default())
 	server.engine.Use(gin.Recovery())
 	server.registerRoutes()
 	return server
