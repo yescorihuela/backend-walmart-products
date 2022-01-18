@@ -44,6 +44,7 @@ func (s *Server) registerRoutes() {
 		// productService: services.NewProductService(domain.NewRepositoryStub()),
 		productService: services.NewProductService(domain.NewProductRepositoryMongo(s.database)),
 	}
-	s.engine.GET("/products", ph.GetAllProducts)
-	s.engine.GET("/products/search", ph.SearchByCriteria)
+	v1 := s.engine.Group("/v1")
+	v1.GET("/products", ph.GetAllProducts)
+	v1.GET("/products/search", ph.SearchByCriteria)
 }
