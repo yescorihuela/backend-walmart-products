@@ -49,13 +49,15 @@ go test ./handlers -cover # para ver por capa
 
 | Endpoint                    | Verbo HTTP | Explicación                                                                                    | Respuestas                                |
 |-----------------------------|------------|------------------------------------------------------------------------------------------------|-------------------------------------------|
-| /products                   | GET        | Trae todos los productos (sin paginar)                                                         | 200 OK \| Array of products 404 Not found |
-| /products/search?q=criteria | GET        | Trae todos los productos (sin paginar) en base al criterio de búsqueda definido por el usuario | 200 OK \| Array of products 400 Not found |
+| localhost:8082/v1/products                   | GET        | Trae todos los productos (sin paginar)                                                         | 200 OK \| Array of products 404 Not found |
+| localhost:8082/v1/products/search?q=criteria | GET        | Trae todos los productos (sin paginar) en base al criterio de búsqueda definido por el usuario | 200 OK \| Array of products 400 Not found |
 
 ### Quedaría pendiente
 
-- **Utilización del logger presente:** (dado a que ya está implementado), fue extendido en los niveles de logging dado a que el original (Gracias a [Alex Edwards](https://www.alexedwards.net/about)).
+- **Utilización del logger presente:** (dado a que ya está implementado), fue extendido en los niveles de logging dado a que el original (Gracias a [Alex Edwards](https://www.alexedwards.net/about)). Un logger más estructurado (en JSON) para mejorar el input de los servicios de observabilidad.
 
 - **Paginación de los resultados:**, aunque quedara fuera del scope de este proyecto, es necesario muchas veces, localmente MongoDB vuela en devolver los resultados y Golang tiene un performance de lujo, pero en producción con datos reales y gran número de transacciones, las cosas cambian mucho.
+
+- Por último pero no por ello, menos importante: un **_GRACEFUL SHUTDOWN_** del servicio de la API, eso está documentado en algunos lugares, ([Alex Edwards](https://www.alexedwards.net/about) lo explica también en su libro), para que tome las señales del teclado o del sistema y termine de drenar las peticiones o servir las peticiones pendientes (muy importante en producción).
 
 **Esto es todo por ahora!**
