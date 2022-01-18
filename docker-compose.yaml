@@ -28,7 +28,7 @@ services:
     depends_on:
       - mongodb-local
 
-  backend_products:
+  backend-products:
     build:
       dockerfile: dockerfile.backend-products
       context: .
