@@ -14,7 +14,7 @@ type ProductHandlers struct {
 func (ph *ProductHandlers) GetAllProducts(ctx *gin.Context) {
 	response, err := ph.productService.FindAllProducts()
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, nil)
+		ctx.JSON(err.Code, nil)
 	}
 	ctx.JSON(http.StatusOK, response)
 }
