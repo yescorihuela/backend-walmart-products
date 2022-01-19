@@ -40,7 +40,7 @@ $ docker exec -it backend-products /bin/bash
 # Segundo, al estar en el prompt del root y en el orden que deseen:
 
 go test ./... -cover # por si quieren ver el coverage
-go test ./api -cover # para ver por capa
+go test ./app -cover # para ver por capa
 go test ./services -cover # para ver por capa
 go test ./handlers -cover # para ver por capa
 ```
@@ -59,5 +59,7 @@ go test ./handlers -cover # para ver por capa
 - **Paginación de los resultados:**, aunque quedara fuera del scope de este proyecto, es necesario muchas veces, localmente MongoDB vuela en devolver los resultados y Golang tiene un performance de lujo, pero en producción con datos reales y gran número de transacciones, las cosas cambian mucho.
 
 - Por último pero no por ello, menos importante: un **_GRACEFUL SHUTDOWN_** del servicio de la API, eso está documentado en algunos lugares, ([Alex Edwards](https://www.alexedwards.net/about) lo explica también en su libro), para que tome las señales del teclado o del sistema y termine de drenar las peticiones o servir las peticiones pendientes (muy importante en producción).
+
+- Testing para las operaciones sobre la base de datos.
 
 **Esto es todo por ahora!**
